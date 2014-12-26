@@ -176,6 +176,7 @@ dbPool.prototype.runQuery = function(conn, query, cb) {
 };
 
 
+// replaces named parameters
 dbPool.prototype.processQuery = function(query, conn) {
 	if(typeof query == 'string') return query;
 	if(typeof query == 'function') return query();
@@ -186,21 +187,32 @@ dbPool.prototype.processQuery = function(query, conn) {
 	var raw = query instanceof Array ? query[0] : query.sql;
 	var args = query instanceof Array ? query[1] : query.args;
 	
+	// exctract all named parameters
+	//var matches = raw.match(/\?(:?\w+)\b/g);
 	
+	// slow crappy way
+	for(var i = 0; i < args.length; i++) {
+		var key = args[i];
+		
+		raw.replace("/\\?" + key + "\\b/g", conn.escape(args[key]));
+		raw.replace("/\\?:" + key + "\\b/g", conn.escapeID(args[key]));
+		raw.replace("/\\?!" + key + "\\b/g", args[key]);
+	}
 	
+	return raw;
 }
 
-dbPool.prototype.escape = function(conn) {
-	
-	
-	
-	
-}
 
 
-// checks the queue for 
 
+
+// checks the queue and rties to run pending items
 dbPool.prototype.processQueue = function(cb) {
+	
+	while(getConnection) {
+		
+		....
+	}
 	
 }
 
