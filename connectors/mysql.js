@@ -71,10 +71,7 @@ MysqlConnector.prototype.terminate = function() {
 
 
 
-MysqlConnector.prototype.escape = function(text) {
-	return "'" + mysql.escape(text) + "'";
-};
-
+MysqlConnector.prototype.escape = mysql.escape;
 MysqlConnector.prototype.escapeID = mysql.escapeId;
 
 
